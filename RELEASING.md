@@ -1,6 +1,6 @@
-# Releasing PokeClaw
+# Releasing Bhavishya
 
-This repo now assumes a single stable release signing key.
+This repo now assumes a single stable release signing key. The current repository is [Krishu7827/bhavishya-agentic](https://github.com/Krishu7827/bhavishya-agentic); `origin` should point there before pushing branches or release tags.
 
 The Bhavishya working-tree build outputs `Bhavishya_v<version>_<timestamp>.apk`, without changing the application ID, version or signing configuration. It does not automatically check upstream PokeClaw releases. https://bhavishya.site/ is a user-opened support link, not an update feed. Keep root `LICENSE` and `NOTICE` intact: the generated assets task packages them under `assets/legal/` for every variant. Verify those entries and the existing signing/upgrade QA before distribution; an APK filename change alone is not a new release.
 
@@ -24,7 +24,7 @@ export KEY_PASSWORD=...
 1. environment variables, or
 2. `local.properties`
 
-Do not commit either the keystore or the secrets.
+Do not commit either the keystore or the secrets. Existing keystore names, key aliases, `POKECLAW_VERSION_*` build variables, and the `io.agents.pokeclaw` package are compatibility identifiers, not public branding; do not rename or replace them as part of a documentation update.
 
 ## 2. Mirror the same key into GitHub Actions
 
@@ -60,7 +60,7 @@ sha256sum app/build/outputs/apk/release/*.apk
 
 ```bash
 git tag -a vX.Y.Z -m "vX.Y.Z"
-git push pokeclaw vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 The GitHub Actions workflow will then create the GitHub Release, upload the signed APK, and attach `SHA256SUMS.txt`.
@@ -77,9 +77,9 @@ export POKECLAW_VERSION_NAME=0.5.1-upgrade-test
 
 Then install the signed baseline APK first, followed by the higher-version APK with `adb install -r ...`.
 
-## 4. Known historical limitation
+## 4. Known historical upstream limitation
 
-The old public debug-signing path and the later public `v0.5.0` APK were signed with different keys.
+The following describes the original upstream release history, not a new Bhavishya release. The old public debug-signing path and the later public `v0.5.0` APK were signed with different keys.
 
 That mismatch is already shipped, so Android cannot retroactively upgrade those installs in place without the original lost signing key. For that cohort, the only honest path is:
 

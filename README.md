@@ -1,28 +1,24 @@
 
 <p align="center">
-  <img src="banna.png" width="600" />
-</p>
-<p align="center">
-  <img src="option.png" width="600" />
+  <img src="app/src/main/res/drawable/pokeclaw_avatar.png" width="128" alt="Bhavishya logo" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/agents-io/PokeClaw/stargazers"><img src="https://img.shields.io/github/stars/agents-io/PokeClaw?style=social" alt="Stars" /></a>
-  <a href="https://github.com/agents-io/PokeClaw/network/members"><img src="https://img.shields.io/github/forks/agents-io/PokeClaw?style=social" alt="Forks" /></a>
-  <a href="https://github.com/agents-io/PokeClaw/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/agents-io/PokeClaw?style=social" alt="Closed Issues" /></a>
+  <a href="https://github.com/Krishu7827/bhavishya-agentic/stargazers"><img src="https://img.shields.io/github/stars/Krishu7827/bhavishya-agentic?style=social" alt="Stars" /></a>
+  <a href="https://github.com/Krishu7827/bhavishya-agentic/network/members"><img src="https://img.shields.io/github/forks/Krishu7827/bhavishya-agentic?style=social" alt="Forks" /></a>
+  <a href="https://github.com/Krishu7827/bhavishya-agentic/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/Krishu7827/bhavishya-agentic?style=social" alt="Closed Issues" /></a>
   <img src="https://img.shields.io/badge/Android-9%2B-3DDC84?logo=android&logoColor=white" alt="Android 9+" />
-  <a href="https://github.com/agents-io/PokeClaw/releases/latest"><img src="https://img.shields.io/github/v/release/agents-io/PokeClaw" alt="Latest Release" /></a>
 </p>
 
 <p align="center">
-  🌐 <a href="https://agents-io.github.io/PokeClaw/">Landing Page</a> — available in English · हिन्दी · 日本語 · Deutsch · 繁中
+  🌐 <a href="https://bhavishya.site/">Bhavishya Website / Support</a>
 </p>
 
-# PokeClaw (PocketClaw) — On-Device AI Phone Agent
+# Bhavishya — On-Device AI Phone Agent
 
 > **Bhavishya build (2026-11-05):** This working tree uses **Bhavishya** / **B.** for Android product branding and APK filenames. Settings has no About section; Website / Support opens https://bhavishya.site/ on tap. Automatic upstream release checks are disabled (the website is not an Android update feed). Package ID, signing configuration and existing app data remain compatible. Original project history and legal attribution are preserved; builds include the root LICENSE and NOTICE under `assets/legal/`. Rebranding does not change model/task behavior; device QA status is tracked in `QA_CHECKLIST.md` (BR1–BR6).
 
-**PokeClaw**, also known as **PocketClaw**, is an open-source Android app for AI phone automation.
+**Bhavishya** is an open-source Android app for AI phone automation, derived from [PokeClaw](https://github.com/agents-io/PokeClaw) by Nicole / agents.io. This repository contains the Bhavishya source snapshot and subsequent changes; upstream legal attribution is retained.
 
 It can run Gemma 4 on-device for local, private phone control, and it also supports optional cloud models when you want stronger reasoning for harder tasks.
 
@@ -32,12 +28,12 @@ In Local mode, model execution stays inside your device. No account or API key i
 
 
 
-```
-Everyone else:  Phone → Internet → Cloud API → Internet → Phone
-                       💳Credit card needed, API key required. Monthly bill attached.
+```text
+Everyone else:   Phone → Internet → Cloud API → Internet → Phone
+                        💳Credit card needed, API key required. Monthly bill attached.
 
-PokeClaw local: Phone → LLM → Phone
-                       Local-first when you want it. Optional cloud when you need it.
+Bhavishya local: Phone → LLM → Phone
+                        Local-first when you want it. Optional cloud when you need it.
 ```
 **AI can control your phone, with local-first execution and optional cloud help.**
 
@@ -52,7 +48,7 @@ https://github.com/user-attachments/assets/5a43d4d5-458a-4eea-a0a5-58d113255741
 
 https://github.com/user-attachments/assets/5c2966c5-04e6-4b22-8d66-11915ae62096
 
-> **☝️ Auto-reply demo:** PokeClaw monitors messages from Mom, reads what she said, and replies based on context using the on-device LLM. [Watch in higher resolution on YouTube](https://youtube.com/shorts/Vxpf474chm0)
+> **☝️ Upstream auto-reply demo:** The original PokeClaw build monitors messages from Mom, reads what she said, and replies based on context using the on-device LLM. [Watch in higher resolution on YouTube](https://youtube.com/shorts/Vxpf474chm0). These upstream recordings are retained for reference, not presented as new Bhavishya QA.
 
 > **☝️ Context demo:** Mom asks "what did I tell you to bring?" — the AI opens the chat, reads the full conversation on screen, sees the earlier message about wine, and replies correctly. This is the difference between context-aware and context-free replies.
 
@@ -74,19 +70,19 @@ https://github.com/user-attachments/assets/89999dd8-a1be-49ad-9419-60c2b38f6374
 
 
 
-## The Story
+## Project Background
 
-I'm building this solo. When Gemma 4 landed with native tool calling on LiteRT-LM, I wanted to know whether a phone could become a real on-device agent instead of just another chatbot. PokeClaw is the result.
+Bhavishya builds on Nicole / agents.io's original PokeClaw project, which explored phone-resident agents using Gemma 4 and LiteRT-LM. The original implementation, demos, and upstream release history remain credited to that project.
 
-The interesting part is not just chatting with a local model. The interesting part is getting a local model to read the screen, choose tools, operate apps, keep task state, and finish real phone workflows. That is exactly what this project is built for.
+The interesting part is not just chatting with a local model. The interesting part is getting a model to read the screen, choose tools, operate apps, keep task state, and finish real phone workflows. That is exactly what this project is built for.
 
-PokeClaw already supports fully on-device automation with Gemma 4 and optional cloud models for stronger task execution. The current focus is broader device support, more generic skills, more local model options, and a cleaner public release path.
+Bhavishya retains the generic Android agent harness and local/cloud runtime integrations. The current focus is reliable device interaction, broader device support, generic skills, and a cleaner release path.
 
-**If you hit something interesting, [open an issue](https://github.com/agents-io/PokeClaw/issues).** Real device reports are how this gets better fast.
+**If you hit something interesting, [open an issue](https://github.com/Krishu7827/bhavishya-agentic/issues).** Real device reports are how this gets better fast.
 
 ## Product Direction
 
-PokeClaw is not just a chat app with a few phone-control tricks glued on top.
+Bhavishya is not just a chat app with a few phone-control tricks glued on top.
 
 The primary accessibility use is user-directed phone assistance for people who have difficulty tapping or swiping, including people with motor impairments. Chat requests drive exposed screen actions; permission choices remain with the user. The service description and accessibility-tool declaration reflect this assistive purpose, not a promise to bypass Android-protected controls. Disability-focused usability testing remains required; this declaration is not a certification.
 
@@ -106,7 +102,7 @@ That is also why the project invests so heavily in:
 - Cloud vs Local model comparisons on the same task families
 - playbooks and rules only when the model proves it needs extra structure
 
-That direction affects how bugs are prioritized. PokeClaw should fix deterministic harness, runtime, hardware, storage, accessibility, foreground-service, signing, and QA-runner problems before drilling into one flaky model task.
+That direction affects how bugs are prioritized. Bhavishya should fix deterministic harness, runtime, hardware, storage, accessibility, foreground-service, signing, and QA-runner problems before drilling into one flaky model task.
 
 Examples of harness problems worth fixing immediately:
 
@@ -128,12 +124,12 @@ Prompts, tools, skills, and playbooks should stay generic. Add structure when it
 
 ### Deployment Positioning
 
-There are already strong mobile-agent frameworks for developers, benchmarks, and cloud/desktop-controlled devices. DroidRun/Mobilerun, minitap/mobile-use, Mobile-Agent, and AppAgent-style systems are useful references, especially for planning, UI observation, benchmark design, and failure recovery. They are not the same deployment category as PokeClaw:
+There are already strong mobile-agent frameworks for developers, benchmarks, and cloud/desktop-controlled devices. DroidRun/Mobilerun, minitap/mobile-use, Mobile-Agent, and AppAgent-style systems are useful references, especially for planning, UI observation, benchmark design, and failure recovery. They are not the same deployment category as Bhavishya:
 
 - DroidRun/Mobilerun local/open-source runs the agent loop in a Python CLI/container on a host machine and talks to a Portal APK through ADB/port forwarding. The Portal APK uses Android Accessibility for tree/gesture/screenshot capture, but it is not where the local LLM agent loop runs. Its phone-initiated path is cloud-backed.
 - minitap/mobile-use, Mobile-Agent, AppAgent, and AppAgentX are external SDK/research harnesses that normally require Python plus ADB, UIAutomator, screenshots, Docker, cloud phones, or host-side model/API services.
 
-PokeClaw should not try to become another PC/SDK/ADB-driven mobile automation framework. Its product lane is different:
+Bhavishya should not try to become another PC/SDK/ADB-driven mobile automation framework. Its product lane is different:
 
 - runs as an Android app on the user's own phone
 - does not require a computer to be connected while tasks run
@@ -141,11 +137,11 @@ PokeClaw should not try to become another PC/SDK/ADB-driven mobile automation fr
 - runs the task loop inside the installed APK, with local LiteRT-LM or optional cloud LLMs behind the same harness
 - exposes integration points for power users without making Tasker, MacroDroid, ADB, or a cloud phone fleet mandatory
 
-External automation tools are still useful. Tasker, MacroDroid, Locale, and similar apps are good deterministic trigger engines. PokeClaw should let them trigger an AI task, but PokeClaw should remain the phone-resident execution harness.
+External automation tools are still useful. Tasker, MacroDroid, Locale, and similar apps are good deterministic trigger engines. Bhavishya should let them trigger an AI task, but Bhavishya should remain the phone-resident execution harness.
 
 ## See the UI
 
-👉 **[Try the interactive demo on our landing page](https://agents-io.github.io/PokeClaw/)** — click through every screen without installing anything.
+See the [UI screenshots](docs/screenshots/) for the inherited interface and the [Bhavishya website](https://bhavishya.site/) for support. The screenshots and demos document earlier builds; they are not a guarantee of the current interface or task success.
 
 ## What it does
 
@@ -153,7 +149,7 @@ The model picks the right tool, fills in the parameters, and executes. You don't
 
 ## Proven Quick Tasks
 
-These are tasks we have already run end-to-end during on-device QA.
+The following task list is inherited from upstream on-device QA. It is not a fresh certification of the current Bhavishya build; consult [QA_CHECKLIST.md](QA_CHECKLIST.md) for current results and pending checks.
 
 ### Local mode
 
@@ -170,7 +166,7 @@ These are tasks we have already run end-to-end during on-device QA.
 
 ### Cloud mode
 
-- Send a WhatsApp message and auto-return to the same PokeClaw conversation
+- Send a WhatsApp message and auto-return to the same agent conversation
 - Search inside YouTube in the real app
 - Check what is trending on Twitter / X and summarize it
 - Install or open Telegram from Play Store
@@ -181,7 +177,7 @@ These are tasks we have already run end-to-end during on-device QA.
 
 ## Benchmark & Real-Device QA
 
-Every number below comes from repeated trials on a physical Pixel 8 Pro running release builds. No cherry-picked runs, no emulators. The full verified task list and tier breakdown is in [thoughts/verified-task-capabilities.md](thoughts/verified-task-capabilities.md).
+These inherited upstream results were reported from repeated trials on a physical Pixel 8 Pro running release builds. They have not been re-certified for the current Bhavishya build. Current device checks and acceptance gaps are tracked in [QA_CHECKLIST.md](QA_CHECKLIST.md).
 
 ### Cloud (GPT-4.1) — 18/20 pass, real tasks on real phone
 
@@ -218,7 +214,7 @@ For the current `local-core` quick-task bundle on a Pixel 8 Pro, Gemma 4 E2B pas
 
 ## How it works
 
-PokeClaw gives a small on-device LLM a set of tools (tap, swipe, type, open app, send message, enable auto-reply, etc.) and lets it decide what to do. The LLM sees a text representation of the current screen, picks an action, sees the result, picks the next action, until the task is done.
+Bhavishya gives a small on-device LLM a set of tools (tap, swipe, type, open app, send message, enable auto-reply, etc.) and lets it decide what to do. The LLM sees a text representation of the current screen, picks an action, sees the result, picks the next action, until the task is done.
 
 Local execution runs via [LiteRT-LM](https://ai.google.dev/edge/litert/llm/overview) with native tool calling. In Local mode, the model runs on-device.
 
@@ -241,7 +237,7 @@ These tools are generic — they work with any app, any contact, any language. T
 
 ## Tools + Skills
 
-Small on-device models get dramatically better when you give them a strong playbook. So we give PokeClaw reusable skills on top of generic tools.
+Small on-device models get dramatically better when you give them a strong playbook. So we give Bhavishya reusable skills on top of generic tools.
 
 The auto-reply feature is a good example. It doesn't work by magic — there's a predefined workflow behind it: open the chat → read all visible messages on screen → generate a context-aware reply → send it → go back to home. The model follows this recipe step by step. Every tool in that chain is generic: `open_app` works with any app, `read_screen` works on any screen, `send_message` works with any contact. The workflow just tells the model which tools to use and in what order.
 
@@ -262,9 +258,9 @@ As on-device models get smarter, more of this can become free-form. Right now, s
 
 ## Download
 
-[**Download APK**](https://github.com/agents-io/PokeClaw/releases/latest)
+No Bhavishya release is currently published in this repository. Check [Bhavishya releases](https://github.com/Krishu7827/bhavishya-agentic/releases) for future APKs, or follow [RELEASING.md](RELEASING.md) to build from source.
 
-> Note: If you are updating from an older public debug build and Android says the package is incompatible, uninstall the old build once and then install the latest APK fresh. Older public debug builds still receive the in-app update prompt, but they need a one-time reinstall before joining the stable-signed `0.6.x` line.
+> The package ID and signing compatibility are unchanged. Keep the same signing key for in-place upgrades. An APK from a different signing key cannot replace an existing install; uninstalling deletes app data. The Bhavishya build does not automatically check upstream releases.
 
 ### Requirements
 
@@ -334,13 +330,13 @@ To attach a debugger to an already-running **idle debug build**, without enablin
 adb shell pidof -s io.agents.pokeclaw
 adb jdwp
 # Press Ctrl+C after confirming the PID: adb jdwp streams continuously.
-# Replace <pid> with the matching PokeClaw PID above.
+# Replace <pid> with the matching Bhavishya PID above.
 adb forward tcp:0 jdwp:<pid>
 # Use the allocated local port printed above, not a guessed port.
 ```
 
 - Android Studio: **Run → Attach debugger to Android process → io.agents.pokeclaw** (recommended for Kotlin/Java source breakpoints; no manual forward needed for Studio).
-- VS Code: with **Debugger for Java** available, choose **Attach PokeClaw (ADB JDWP)** from [launch.json](.vscode/launch.json) and enter the allocated port.
+- VS Code: with **Debugger for Java** available, use a local Java attach configuration and enter the allocated port. Existing local configurations may still be named **Attach PokeClaw (ADB JDWP)**; `.vscode/launch.json` is local-only and is not included in this repository.
 - CLI: `$JAVA_HOME/bin/jdb -attach localhost:<port>`; `threads` inspects threads, `exit` detaches. Breakpoints can pause accessibility callbacks; do not leave the app suspended while measuring behavior or timing.
 - Detach without terminating the app, verify its PID is still alive, then remove only this forward using `adb forward --remove tcp:<port>`. PID/port must be renewed after an app restart. No release debuggability or public listener is enabled.
 
@@ -348,14 +344,14 @@ Permission actions retain fresh-node `ACTION_CLICK` validation with no fallback 
 
 ## Roadmap
 
-This is the current direction for PokeClaw based on real device testing, open issues, and the most common feature requests.
+This is the current direction for Bhavishya based on real device testing, open issues, and the most common feature requests.
 
 ### Near-term
 
 - **Stabler public releases and upgrades.** The release/signing path is being locked down so future public APKs upgrade cleanly instead of falling back to uninstall/reinstall behavior from the older debug-signed builds.
-- **External automation input.** Tasker, MacroDroid, Locale, and similar Android automation tools are strong deterministic trigger engines. PokeClaw now exposes a production, user-enabled intent API so those tools can decide when to trigger and PokeClaw can handle the open-ended AI task execution. Next work is richer recipes, cancellation/status actions, and Tasker/MacroDroid callback-consumer QA.
-- **Persistent instructions and scoped rules.** PokeClaw needs an inspectable instruction stack: hard platform/tool safety in code, user global instructions, app/channel-scoped rules, explicit user-approved memory, then the current task prompt. Screen, notification, and web content should remain untrusted context, not higher-priority instructions.
-- **Missed-call auto follow-up.** A high-priority use case is: someone calls, you miss it, and PokeClaw automatically sends a follow-up message to that caller and keeps the status visible in the same chatroom. The preferred first path is SMS/API-first. WhatsApp follow-up is only worth adding if there is a reliable non-UI route; otherwise it should stay an explicit fallback path, not the core design.
+- **External automation input.** Tasker, MacroDroid, Locale, and similar Android automation tools are strong deterministic trigger engines. Bhavishya now exposes a production, user-enabled intent API so those tools can decide when to trigger and Bhavishya can handle the open-ended AI task execution. Next work is richer recipes, cancellation/status actions, and Tasker/MacroDroid callback-consumer QA.
+- **Persistent instructions and scoped rules.** Bhavishya needs an inspectable instruction stack: hard platform/tool safety in code, user global instructions, app/channel-scoped rules, explicit user-approved memory, then the current task prompt. Screen, notification, and web content should remain untrusted context, not higher-priority instructions.
+- **Missed-call auto follow-up.** A high-priority use case is: someone calls, you miss it, and Bhavishya automatically sends a follow-up message to that caller and keeps the status visible in the same chatroom. The preferred first path is SMS/API-first. WhatsApp follow-up is only worth adding if there is a reliable non-UI route; otherwise it should stay an explicit fallback path, not the core design.
 - **Lower-RAM local model options.** Right now the built-in local model choices are still too heavy for a lot of mid-range phones. Smaller on-device models are high priority.
 - **More small local models for real device coverage.** 1B–1.5B class models for lower-end phones are on the roadmap so more devices can at least run a usable local agent instead of being locked out by RAM limits.
 - **More reliable local model downloads.** Resume/retry behavior, partial download cleanup, and corrupted-model detection are all being hardened so downloads survive weak connections and screen-off/resume cases better.
@@ -363,6 +359,10 @@ This is the current direction for PokeClaw based on real device testing, open is
 - **More generic phone-control skills.** We are continuing to replace brittle, app-specific assumptions with generic tools and reusable skills so tasks survive OEM UI changes better.
 
 ### In progress
+
+- **Accessibility enable → chat return (2026-11-18; installed, behavioral QA pending).** After an app-initiated accessibility permission flow, service connection now requests the existing chat screen rather than in-app Settings. The existing one-shot/two-minute request window remains; callbacks recheck that the service is still connected and enabled. The unconditional global Back action was removed to avoid navigating an unrelated foreground screen. Android still controls consent and activity launches. In-place installation and installed APK checksum verified after explicit install-only approval; AW6–AW8 and affected device regression remain pending, as the user requested no testing.
+
+- **Accessibility welcome prompt (2026-11-18; installed, full E2E pending).** Opening Bhavishya with accessibility OFF now shows a themed explanation with **Allow accessibility** and **Not now**. The latest source disables outside-tap and Android Back dismissal: only **Not now** explicitly dismisses the prompt (this refinement is built and installed; device behavioral testing is pending). Allow opens Android's Bhavishya service details where supported, otherwise the Accessibility list, without navigating through in-app Settings. The user must enable the switch and accept Android's consent prompt; returning after enabling hides the dialog. Declining leaves chat available and the permission banner can reopen the guidance. Enabled-but-connecting/disconnected states do not show an incorrect OFF prompt. AW1–AW5 cover consent, return, cancellation, layout and payment-auto-off recovery. Installation requires separate user approval.
 
 - **Score-based screen recurrence (installed debug build, 2026-11-06; behavioral QA pending).** The cycle detector now supports conservative similarity comparisons of existing compact accessibility observations, retaining exact-match fallback. Initial score:55% ordered text-node agreement +30% character-weighted agreement +15% ordered layout agreement; acceptance requires96% overall,90% on both text components and95% layout. Changed control labels, editable values and exposed on/off state veto fuzzy matching; pure text reorder also vetoes it. Small passive text changes such as clocks can be tolerated without deleting numbers or truncating model-visible content. All three revisits of each cycle phase are compared pairwise to avoid gradual-drift chaining. Existing two-to-four-screen/three-repeat history and hint → strategy switch → stop escalation remain; repeated similar consecutive observations do not add transitions. Fuzzy features are bounded to512 nodes/250,000 characters and require12 nonblank text nodes; sparse, oversized or unrecognized formats remain exact-only. Scores/reasons/timing are logged without raw labels; no extra screen capture/model request. Offline debug assembly passed in28s; after separate installation authorization at17:32, in-place update, matching APK checksum, app launch and accessibility binding were verified. SS1–SS4/affected/full device QA remain pending. Thresholds are provisional, not device-calibrated. Small meaningful noninteractive text changes can still be mistaken for noise; this is not semantic progress verification and does not fix modal occlusion. This supersedes the exact-only build described below.
 
@@ -380,25 +380,25 @@ This is the current direction for PokeClaw based on real device testing, open is
 - **Model-first task routing (installed debug update, 2026-11-03).** Every request reaching `PipelineRouter` now passes unchanged to the model's agent loop; regex-based DirectTool/DirectIntent and automatic skill-trigger shortcuts are bypassed. The model chooses tools, while existing permissions, task locks and budgets remain. Former shortcuts now require an available model and no longer receive the direct-intent Accessibility exemption. Kotlin compilation passed; user-owned device/model acceptance remains pending (QA MR1–MR4). This does not change separate UI preflight or explicit monitor handling.
 - **Action feedback and repetition recovery (source update, 2026-11-03).** Failed UI actions retain their error and receive a fresh screen when available; `tap_node` and `find_and_tap` now refresh automatically. The detector uses each executed tool's full canonical argument fingerprint, actual errors, and comparable screen-line changes instead of truncated first-call arguments. Successful observations do not erase repeated-error evidence. Gesture completion is not task success: the model still judges the visible outcome and chooses alternatives. Same-batch node references are rejected after a tree refresh. Kotlin compilation and debug APK assembly passed. Installed on the user's HMD Vibe2 5G on 2026-11-03 (v0.7.1/code29); a signing mismatch required an explicitly approved uninstall/fresh install. Installed APK checksum verified; device/model acceptance remains pending (QA AF1–AF4).
 - **Import your own local `.litertlm` models.** User-accessible local model import is on the roadmap so you can bring your own LiteRT model instead of being locked to the built-in download list.
-- **Custom local model sources.** We want PokeClaw to go beyond a fixed built-in catalog and support user-defined model sources, including direct downloads from Hugging Face or other hosted URLs.
-- **Google AI Core / system local AI integration.** We are tracking Android's newer on-device AI stack so PokeClaw can eventually use official system-level local model APIs where they make sense, instead of relying on a single runtime path forever.
+- **Custom local model sources.** We want Bhavishya to go beyond a fixed built-in catalog and support user-defined model sources, including direct downloads from Hugging Face or other hosted URLs.
+- **Google AI Core / system local AI integration.** We are tracking Android's newer on-device AI stack so Bhavishya can eventually use official system-level local model APIs where they make sense, instead of relying on a single runtime path forever.
 - **More built-in workflows.** More quick-task / skill coverage is planned beyond the first WhatsApp-centric workflows.
 - **Remote control / remote conversation flows.** Controlling a phone from another device is a real request. Telegram bot control is the first concrete path being tested; it needs clear token setup, polling status, and true end-to-end QA with an account that can start and message the bot.
 - **Voice input.** A microphone button is a useful prompt input path. The first version should be explicit push-to-talk; wake-word/background listening needs a separate privacy, permission, and battery design.
 
 ### Known platform constraints
 
-- **Permission consent is not universal system-dialog control.** Current source uses normal exposed accessibility node actions and existing cloud chat for clarification, not a permission overlay or automatic grant. Android-hidden/rejected controls require an honest limitation and manual help, never screenshot/coordinate/settings bypass. Android 14+ restricts sensitive-marked nodes for non-accessibility-tool services; Android 16+ also restricts injected gestures on those controls. This is not a blanket ban on permission dialogs. PokeClaw declares its primary disability-assistance purpose with `isAccessibilityTool=true` and a user-facing service description; this is not a generic automation permission toggle or a guarantee of access. Unknown OEM, projection, biometric and settings screens are not certified; a fresh readable foreground is required for validated permission actions. The phone now has the conversational update, but installation/launch verification does not certify permission-dialog behavior.
+- **Permission consent is not universal system-dialog control.** Current source uses normal exposed accessibility node actions and existing cloud chat for clarification, not a permission overlay or automatic grant. Android-hidden/rejected controls require an honest limitation and manual help, never screenshot/coordinate/settings bypass. Android 14+ restricts sensitive-marked nodes for non-accessibility-tool services; Android 16+ also restricts injected gestures on those controls. This is not a blanket ban on permission dialogs. Bhavishya declares its primary disability-assistance purpose with `isAccessibilityTool=true` and a user-facing service description; this is not a generic automation permission toggle or a guarantee of access. Unknown OEM, projection, biometric and settings screens are not certified; a fresh readable foreground is required for validated permission actions. The phone now has the conversational update, but installation/launch verification does not certify permission-dialog behavior.
 - **Accessibility feedback is not semantic outcome verification.** A completed gesture or changed UI tree does not prove the intended action succeeded. Unavailable observations are treated as unknown, not unchanged. The installed debug build adds score-based recurrence to repeated two-to-four-screen content detection; installation/launch smoke passed but behavioral E2E and calibration remain pending. Dynamic content, short meaningful passive-text changes, longer cycles and changes without meaningful task progress remain limitations. Similarity thresholds do not prove task progress or completion, and do not establish whether a control is obscured by a modal. There is no fixed round cap; configured task budgets and manual Stop remain in place.
-- **Edge Gallery model detection is not fully under our control.** Android hides other apps' `Android/data/...` sandboxes from normal file-pickers, so PokeClaw cannot generically "see" Edge Gallery's downloaded models unless they are exported into a user-accessible location first.
-- **GPU support is runtime and device specific.** If a device can run GPU in another app but PokeClaw falls back to CPU, the next step is a debug report with device, ROM, model, selected backend, delegate init, and fallback logs. PokeClaw should keep CPU fallback safe and truthful instead of forcing GPU blindly.
+- **Edge Gallery model detection is not fully under our control.** Android hides other apps' `Android/data/...` sandboxes from normal file-pickers, so Bhavishya cannot generically "see" Edge Gallery's downloaded models unless they are exported into a user-accessible location first.
+- **GPU support is runtime and device specific.** If a device can run GPU in another app but Bhavishya falls back to CPU, the next step is a debug report with device, ROM, model, selected backend, delegate init, and fallback logs. Bhavishya should keep CPU fallback safe and truthful instead of forcing GPU blindly.
 - **Sideload + accessibility apps may trigger OEM security warnings.** Samsung / Play Protect warnings are being addressed through a cleaner release/signing path, but sideload trust prompts are partly controlled by the platform and OEM policy.
-- **Cloud mobile-agent harnesses already exist.** PokeClaw should not compete as a cloud phone farm or desktop-controlled ADB framework. The durable product direction is a phone-resident Android harness that can run on the user's own device, slot local or cloud models, and survive real Accessibility, Notification, storage, permission, and OEM lifecycle constraints.
-- **Telegram bot control requires a writable account state.** A Telegram bot cannot cold-message a user who has not started the bot, and a frozen/read-only Telegram account cannot complete the required `/start` or task-message step. Treat this as an environment blocker, not a PokeClaw channel failure.
+- **Cloud mobile-agent harnesses already exist.** Bhavishya should not compete as a cloud phone farm or desktop-controlled ADB framework. The durable product direction is a phone-resident Android harness that can run on the user's own device, slot local or cloud models, and survive real Accessibility, Notification, storage, permission, and OEM lifecycle constraints.
+- **Telegram bot control requires a writable account state.** A Telegram bot cannot cold-message a user who has not started the bot, and a frozen/read-only Telegram account cannot complete the required `/start` or task-message step. Treat this as an environment blocker, not a Bhavishya channel failure.
 
 ### External Automation API
 
-PokeClaw exposes a user-enabled Android intent entrypoint for Tasker, MacroDroid, Locale, ADB, and other trusted local automation tools.
+Bhavishya exposes a user-enabled Android intent entrypoint for Tasker, MacroDroid, Locale, ADB, and other trusted local automation tools.
 
 The setting is off by default. Enable it from `Settings -> Remote Control -> External Automation`.
 
@@ -415,11 +415,11 @@ Verified on a Pixel 8 Pro on 2026-04-30:
 - Package: `io.agents.pokeclaw`
 - Class: `io.agents.pokeclaw.automation.ExternalAutomationActivity`
 - Extra: `task = how much battery left`
-- Result: MacroDroid launched PokeClaw's automation activity, PokeClaw accepted it, executed the deterministic battery tool, and returned a live battery result in the PokeClaw chatroom.
+- Historical upstream result: MacroDroid launched the agent's automation activity, which accepted the request, executed the deterministic battery tool, and returned a live battery result in the same chatroom. This is not a fresh Bhavishya regression result.
 
 MacroDroid setup:
 
-1. In PokeClaw, enable `Settings -> Remote Control -> External Automation`.
+1. In Bhavishya, enable `Settings -> Remote Control -> External Automation`.
 2. In MacroDroid, create a new macro.
 3. Add any trigger you want. For a simple smoke test, use `User Input -> Shortcut Launched`.
 4. Add action `Device Actions -> Send Intent`.
@@ -431,7 +431,7 @@ MacroDroid setup:
 10. Set `Extra 1` value to the task text, for example `how much battery left`.
 11. Save the macro, then run MacroDroid's `Test macro`.
 
-Expected result: PokeClaw opens, records the task in the chatroom, runs the task through the normal harness, and shows the result. The intent does not bypass PokeClaw safety, permissions, or tool rules.
+Expected result: Bhavishya opens, records the task in the chatroom, runs the task through the normal harness, and shows the result. The intent does not bypass Bhavishya safety, permissions, or tool rules.
 
 For chat instead of task mode, use:
 
@@ -439,7 +439,7 @@ For chat instead of task mode, use:
 - Extra name: `chat`
 - Extra value: the chat message
 
-The same pattern should work from Tasker or Locale-style tools as long as they launch the exported PokeClaw automation activity with an explicit package/class. The broadcast receiver is still available for ADB and compatible callers, but Android can block a background broadcast receiver from opening an activity on modern target SDKs.
+The same pattern should work from Tasker or Locale-style tools as long as they launch the exported Bhavishya automation activity with an explicit package/class. The broadcast receiver is still available for ADB and compatible callers, but Android can block a background broadcast receiver from opening an activity on modern target SDKs.
 
 Task example:
 
@@ -467,7 +467,7 @@ Supported extras:
 - `return_action`
 - `return_package`
 
-If `return_action` is provided, PokeClaw sends callback broadcasts with `status`, `request_id`, and either `result` or `error`. Current statuses are `accepted`, `completed`, `failed`, `cancelled`, `blocked`, and `rejected`. `RUN_TASK` sends `accepted` plus a terminal callback; `RUN_CHAT` currently sends only the immediate `accepted` callback.
+If `return_action` is provided, Bhavishya sends callback broadcasts with `status`, `request_id`, and either `result` or `error`. Current statuses are `accepted`, `completed`, `failed`, `cancelled`, `blocked`, and `rejected`. `RUN_TASK` sends `accepted` plus a terminal callback; `RUN_CHAT` currently sends only the immediate `accepted` callback.
 
 ### Where feature requests go
 
@@ -488,15 +488,24 @@ If you want something added, please open an issue. The roadmap above is intentio
 
 ## Help Wanted
 
-PokeClaw is moving fast, and the roadmap is being shaped directly by real device reports, feature requests, and QA results. If you want to help push local phone agents forward:
+Bhavishya's roadmap is being shaped directly by real device reports, feature requests, and QA results. If you want to help push local phone agents forward:
 
-- ⭐ **[Star this repo](https://github.com/agents-io/PokeClaw)** if you think local AI phone control matters
-- 🐛 **[Open an issue](https://github.com/agents-io/PokeClaw/issues)** when you hit a bug or want a feature
-- 🍴 **[Fork it](https://github.com/agents-io/PokeClaw/fork)** and build on it
+- ⭐ **[Star this repo](https://github.com/Krishu7827/bhavishya-agentic)** if you think local AI phone control matters
+- 🐛 **[Open an issue](https://github.com/Krishu7827/bhavishya-agentic/issues)** when you hit a bug or want a feature
+- 🍴 **[Fork it](https://github.com/Krishu7827/bhavishya-agentic/fork)** and build on it
 
 Every star helps more people find the project. Every issue helps shape the next release.
 
 ## Changelog
+
+### Bhavishya documentation (2026-11-07)
+
+- Rebranded the README and Markdown project documentation to Bhavishya; current repository links point to `Krishu7827/bhavishya-agentic`.
+- Preserved upstream legal attribution, technical identifiers, and historical QA/release evidence. Website pages and Android source are unchanged; this documentation update is not an APK release.
+
+### Inherited upstream release history
+
+The releases below belong to the original PokeClaw project, not new Bhavishya releases. Historical names and reported results are retained for provenance; issue references belong to [the upstream issue tracker](https://github.com/agents-io/PokeClaw/issues).
 
 ### v0.7.1 (2026-05-26) — hotfix: global prompt actually flows now
 
@@ -629,18 +638,22 @@ Every star helps more people find the project. Every issue helps shape the next 
 
 ## Acknowledgments
 
-PokeClaw exists because of [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) by [Google DeepMind](https://github.com/google-deepmind). Thank you to [Clément Farabet](https://github.com/clementfarabet), [Olivier Lacombe](https://github.com/olivierlacombe), and the entire Gemma team for shipping an open model with native tool calling under Apache 2.0. You made it possible for a solo developer to build a working phone agent in two nights. The [LiteRT-LM](https://ai.google.dev/edge/litert/llm/overview) runtime is what makes on-device inference practical.
+Bhavishya builds on [PokeClaw](https://github.com/agents-io/PokeClaw) by Nicole / agents.io. Credit for the original project and its development story belongs to its authors; see [NOTICE](NOTICE) for attribution.
+
+The inherited local runtime uses [Gemma 4](https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/) by [Google DeepMind](https://github.com/google-deepmind). Thank you to [Clément Farabet](https://github.com/clementfarabet), [Olivier Lacombe](https://github.com/olivierlacombe), and the Gemma team. The [LiteRT-LM](https://ai.google.dev/edge/litert/llm/overview) runtime makes on-device inference practical.
 
 Also inspired by the [OpenClaw](https://github.com/openclaw/openclaw) community 🦞 for proving that AI agents that actually do things are what people want.
 
-And thank you to [Claude Code](https://claude.ai/code) by Anthropic. I'm a CS dropout with zero Android development experience. Claude Code made it possible for me to go from nothing to a working app in two nights. The future is wild.
+The original author also credited [Claude Code](https://claude.ai/code) by Anthropic for assistance developing the upstream app.
 
-## Trademark
+## Upstream Trademark
+
+This fork is named **Bhavishya**. The following upstream notice is preserved for attribution, not used as Bhavishya branding:
 
 PokeClaw is a trademark of Nicole / agents.io. The name "PokeClaw" and the PokeClaw logo may not be used to endorse or promote products derived from this software without prior written permission. Forks must be renamed before distribution.
 
 ## License
 
-Apache 2.0
+[Apache 2.0](LICENSE). Required attribution is retained in [NOTICE](NOTICE).
 
-Contributors sign our [CLA](CLA.md) before their first PR is merged.
+The retained [CLA](CLA.md) names the original project and owner. Its legal terms and parties are unchanged by this documentation rebrand.

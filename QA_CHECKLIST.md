@@ -1,11 +1,77 @@
-# PokeClaw E2E QA Checklist
+# Bhavishya E2E QA Checklist
 
 Every build must pass ALL checks before shipping.
+
+Current app-facing steps use **Bhavishya**. Historical QA observations, old notification-channel labels, release artifacts, upstream issue/PR references and compatibility identifiers retain their original names; they are evidence, not current branding requirements. The Android package remains `io.agents.pokeclaw`.
 
 Product direction lives in `README.md` under `Product Direction`, `Roadmap`, and `Known platform constraints`. QA should enforce that direction:
 fix deterministic harness/runtime bugs first, keep prompts and skills generic, and measure stochastic model behavior by repeated-trial success rate instead of hardcoding one task.
 
 ---
+
+## Accessibility welcome prompt — 2026-11-18
+
+Designed before code. Install only after explicit approval. Use `SERIAL='<approved-physical-device-serial>'` (verify with `adb devices -l`), never the shared emulator. No secure-setting writes, payments, credentials, or paid model calls. For every UI action, dump with `adb -s "$SERIAL" shell uiautomator dump /sdcard/bhavishya-welcome-qa.xml`, read with `adb -s "$SERIAL" shell cat /sdcard/bhavishya-welcome-qa.xml`, then `adb -s "$SERIAL" shell input tap X Y` using the freshly observed target center, not fixed cross-device coordinates.
+
+- [ ] **AW1. Open while OFF / allow**: Read `adb -s "$SERIAL" shell settings get secure enabled_accessibility_services`; with Bhavishya OFF, `adb -s "$SERIAL" shell am start -n io.agents.pokeclaw/.ui.splash.SplashActivity` → one themed dialog explaining access, manual grant and optional dismissal. Tap Allow accessibility → Android Bhavishya accessibility detail (or OEM Accessibility list), not in-app Settings. Enable only through the visible switch and system Allow; return using `adb -s "$SERIAL" shell input keyevent KEYCODE_BACK` as needed → dialog disappears, chat history unchanged. Inspect `adb -s "$SERIAL" logcat -d -s ComposeChatActivity:I AppCapabilityCoordinator:I '*:S'` for status and navigation.
+- [ ] **AW2. Decline / reopen**: With OFF, tap Not now → chat usable; wait 3 seconds → polling does not reopen dialog. Tap the existing permission banner → same dialog, then Allow → direct system settings. Back out without granting → OFF prompt returns; Home (`adb -s "$SERIAL" shell input keyevent KEYCODE_HOME`) then relaunch → prompt visible again. No network dependency or automatic permission grant.
+- [ ] **AW3. Enabled / transient reconnect**: Enable through visible Settings and relaunch → no OFF dialog; Home/return and rotate → no duplicate dialogs. Enabled-but-connecting/degraded service must not be described as permission OFF. In this state the existing banner still opens system settings for repair. Existing H/K permissions/chat navigation remain functional; do not start paid tasks.
+- [ ] **AW4. Rapid tap / layout / missing settings**: Double-tap Allow → one settings launch, no stacked activities/crash. With large font, landscape, light and dark themes (manual device setup), both buttons and full explanation remain reachable by scrolling. Test service-detail fallback on an OEM without that page; if no Settings handler exists, show a readable error and retain the dialog (requires suitable device; no mocks). Verify no task stop/start is caused by dismissing this UI.
+- [ ] **AW5. Return after payment auto-off**: Run approved launcher-only PA1 → accessibility OFF → launch Bhavishya → prompt visible → manually enable through Allow → return, prompt gone and old off notification cleared. No payment or login actions. Re-run affected H/K and PA6 navigation; full accessibility regression remains required before release.
+
+### Chat return after enabling — designed before code, 2026-11-18
+
+Use the same explicit phone target, fresh UI dumps/tap coordinates and separate install approval as AW1. Capture logs with `adb -s "$SERIAL" logcat -d -s ClawA11yService:I ComposeChatActivity:I '*:S'`. Never enable using secure-setting writes.
+
+- [ ] **AW6. Enable and return to existing chat**: With accessibility OFF, `adb -s "$SERIAL" shell am start -n io.agents.pokeclaw/.ui.splash.SplashActivity` → tap Allow → select Bhavishya in Android Settings → toggle Use Bhavishya and accept visible system consent within two minutes → without pressing Back, chat foregrounds once after service connection; welcome disappears, existing conversation unchanged, no automatic task/message/model request. Repeat from the in-app Settings accessibility shortcut. Use `adb -s "$SERIAL" shell dumpsys activity activities` to verify ComposeChatActivity resumed, not SettingsActivity; repeat AW1 and PA6 navigation.
+- [ ] **AW7. Decline / expired or absent request**: Open Allow flow but deny system consent → no automatic return or permission grant. Wait over two minutes (`sleep 125`) before enabling manually → no forced chat launch. Later ordinary service rebinds with no fresh app-initiated permission request must not open chat; log explicitly records no pending return. Separate OS restart/rebind case may require manual setup.
+- [ ] **AW8. Rapid return / service disconnect / failure**: Enable via AW6 then immediately return to chat manually → no duplicate chat/history reset or global Back action. If disabled again before the delayed return, callback must skip when disabled/not current service. Inspect logs for request, enabled/connected recheck, launch or skip. Launch-denial path must log error and show manual-return guidance (requires device reproducing denial; no mocks). Re-run affected H/K; full accessibility-service regression remains a release gate.
+
+- [ ] **AW9. Explicit dismissal only (designed before code, 2026-11-18)**: After separately approved installation, with accessibility OFF open Bhavishya using `adb -s "$SERIAL" shell am start -n io.agents.pokeclaw/.ui.splash.SplashActivity`. Dump/read UI using the commands above; tap a visible point outside the dialog using `adb -s "$SERIAL" shell input tap X Y` → modal stays open and underlying chat receives no action. Tap non-button content inside → stays open. `adb -s "$SERIAL" shell input keyevent KEYCODE_BACK` (repeat twice) → stays open. Tap Not now using freshly observed bounds → dismisses once; wait 3 seconds → remains dismissed. Reopen via permission banner → Allow still opens Android Settings; explicitly enable and verify AW6 return/no prompt. Repeat with gesture Back and large font as manual variants; Home must still leave the app. Re-run AW2 and affected H UI checks. No permission changes without explicit QA approval.
+
+### QA Debug Changelog — accessibility welcome
+
+- [2026-11-18] [PASS] Explicit-dismissal refinement builds with offline `:app:assembleDebug` (8s); affected dialog editor diagnostics clean. These are build/static checks, not E2E acceptance.
+- [2026-11-18] [PASS] Installation only separately authorized (“Sirf install karo”): 10:50 APK installed in place successfully; installed/local SHA256 match `46a2815d6bf604414e40e1c943911e73facde7a42a637445f69f35aea5ce1c0d`.
+- [2026-11-18] [SKIP] AW9, affected AW2/H and AW6 return regression await device QA authorization. No app launch, navigation or permission changes performed for this refinement.
+
+- [2026-11-18 10:42] [PASS] Chat-return build/static checks only: offline assembleDebug succeeded in 12s; affected editor diagnostics and diff whitespace checks clean. APK Bhavishya_v0.7.1_20261118_104225.apk built but NOT installed. AW6–AW8 were added before code.
+- [2026-11-18] [PASS] User approved “install kro bs”: 10:42 APK installed in place on HMD via adb install -r. Local/installed SHA256 both 18f0f181a48d20a1dbb91a0933c6b95865afa3e10ed426c0be37b1f735a18bb1. No app launch, screen navigation or permission toggles performed.
+- [2026-11-18] [SKIP] AW6–AW8, affected AW1/PA6/H/K and full accessibility regression: user explicitly requested installation only, not testing. Build/install is not behavioral acceptance.
+
+- [2026-11-18] [PASS] Build/static checks only: offline debug assembly in 16s produced Bhavishya_v0.7.1_20261118_102723.apk; affected editor diagnostics and git diff --check clean. Not installed.
+- [2026-11-18 10:31] [PASS] Authorized in-place installation and launch smoke: user subsequently approved “abb install kro”; adb install -r succeeded on HMD Vibe2 5G. Installed/local APK SHA256 match (3b0962c78a5f1ba154479a11f1e835b4185082ae067e852dc5ea77fdace52185); existing conversation restored. OFF state and welcome-show transition confirmed by logcat. No automated permission grant or payment.
+- [2026-11-18 10:31] [ISSUE] AW1/AW4 navigation observation: Allow was tapped independently during capture; HMD Android 16 blocks service-detail launch with privileged OPEN_ACCESSIBILITY_DETAILS_SETTINGS. Implemented fallback logged and opened the Accessibility list instead. Direct detail page is not guaranteed. Dialog screenshot was not captured before navigation.
+- [2026-11-18] [SKIP] Full AW1–AW5 and affected H/K/PA6 acceptance remain pending; install/launch and fallback observations do not certify all flows.
+
+## Payment-app accessibility auto-off — 2026-11-18
+
+Designed before code. User approved UPI handlers plus popular banking-package matching, a two-second delay, cancellation when leaving early, an off notification, and connected-phone QA without payments. Use the intended USB device explicitly (`SERIAL` from `adb devices -l`); do not touch other devices/emulators. Re-enable only through Android's visible accessibility Settings flow, never `settings put`. No payment intents, login, PIN, credentials, sends or financial transactions.
+
+- [ ] **PA1. Payment app stays open**: Enable Bhavishya accessibility; `adb -s "$SERIAL" shell monkey -p com.phonepe.app -c android.intent.category.LAUNCHER 1` → wait at least 2 seconds → `adb -s "$SERIAL" shell settings get secure enabled_accessibility_services` no longer contains Bhavishya → `adb -s "$SERIAL" logcat -d -s PaymentAppGuard:I '*:S'` shows detection, timer, final foreground check and disable confirmation → `adb -s "$SERIAL" shell cmd statusbar expand-notifications` + `adb -s "$SERIAL" shell uiautomator dump /sdcard/payment-qa.xml` shows Bhavishya accessibility-off notification. No automatic re-enable.
+- [ ] **PA2. Leave before delay**: Re-enable via Settings → launch PhonePe as above → immediately `adb -s "$SERIAL" shell input keyevent KEYCODE_HOME` → wait 3 seconds → service still enabled, cancellation logged, no new off notification. Repeat with immediate app re-entry; only the new uninterrupted 2-second interval may disable. Repeated same-app window events must not restart the original timer.
+- [ ] **PA3. Dynamic UPI and bank coverage**: Repeat PA1 separately with `com.google.android.apps.nbu.paisa.user` (UPI handler) and `com.bankofbaroda.mconnect` (bank fallback), re-enabling via Settings between cases. Open launcher only; stop at login/consent screens. Popular-package coverage is not a guarantee for every bank/version.
+- [ ] **PA4. Normal app / screen-off**: With service enabled, open Android Settings (`adb -s "$SERIAL" shell am start -a android.settings.SETTINGS`) and wait 3 seconds → accessibility stays enabled. Start a payment-app timer then use the physical power button before expiry → timer must not disable on locked/screen-off phone; unlock manually. Notification shade/another focused app cancels pending timer.
+- [ ] **PA5. Notification permission/channel blocked** (manual notification settings): Deny Bhavishya notifications or disable only its payment-safety channel in Android Settings → repeat PA1 → accessibility still disabled, readable Toast explains off state and notification-settings requirement, warning logged, no crash/forced settings launch. Restore the original notification configuration.
+- [ ] **PA6. Re-enable / active task / monitor**: Tap the off notification → Android Accessibility Settings (not a forced app return) → explicitly re-enable Bhavishya → existing phone controls work again and stale off notification clears. If a separately authorized task is running when auto-off triggers, existing task cancellation is requested and no new accessibility actions may succeed after disconnection; monitor contacts/configuration stay intact and monitor degrades honestly. Run affected H/K/C and full accessibility-service regression checklist before release; no paid model trial is implied by this no-payment QA authorization.
+
+### QA Debug Changelog — payment auto-off
+
+- [2026-11-18] [SKIP] PA1–PA6 designed; implementation and device validation pending. Full accessibility-service regression remains a release gate.
+
+## Local request-response viewer transport — 2026-11-18
+
+Designed before changing the local `live-model-screen.cjs` helper used by the existing VS Code task. This is host-side, read-only tooling, not an APK change. Run from the terminal containing the viewer script (`VIEWER` is its absolute path).
+
+- [ ] **LV1. USB log access**: Connect and authorize one USB phone → `adb devices -l` shows one ready USB transport → `node "$VIEWER" --check` reports USB and READY with the existing log's metadata; no inference or phone action.
+- [ ] **LV2. Wireless log access** (manual connection required): Unplug USB and connect the paired phone using Android's displayed wireless endpoint (`adb connect <host>:<port>`) → `adb devices -l` shows one ready wireless transport → `node "$VIEWER" --check` reports wireless and READY, with no script edit.
+- [ ] **LV3. Disconnect/reconnect** (manual cable/network interaction): `node "$VIEWER"` → disconnect the sole transport → one readable waiting message, retries without exiting → reconnect via USB or wireless → access-restored message and logs resume. Stop with Ctrl+C.
+- [ ] **LV4. Ambiguous or unauthorized devices** (manual/second transport required): `adb devices -l` shows no ready device, an unauthorized/offline device, or multiple ready transports → `node "$VIEWER" --check` exits nonzero with an explanation; continuous mode waits rather than guessing a device. Disconnect extra transports/authorize the intended phone → retry succeeds.
+
+### QA Debug Changelog — local viewer
+
+- [2026-11-18] [PASS] LV1: actual HMD Vibe2 5G USB connection dynamically selected. `--check` read an existing completed HTTP200 exchange; `--once` retained request/response headings, model and duration. Node syntax check, editor diagnostics and repository diff whitespace check passed. No inference, app action, APK change or restart of an existing viewer.
+- [2026-11-18] [SKIP] LV2–LV4: no wireless transport/mDNS service or second device available; cable disconnection/authorization changes not performed. Wireless selection and retries are implemented but not yet device-validated. Do not disconnect other users' ADB devices or reset the shared ADB server for these checks.
 
 ## Score-based screen recurrence — 2026-11-06
 
@@ -229,7 +295,7 @@ User withdrew the new cumulative model-usage feature at14:42. UT2–UT4 below ar
 - [x] **CP9. Debugger attach without runtime wait [ADB, DEBUG BUILD]**: With app idle, get its PID via `adb shell pidof -s io.agents.pokeclaw`, verify it appears in `adb jdwp` (Ctrl+C after confirmation; this command streams), allocate `adb forward tcp:0 jdwp:<pid>`, then attach Android Studio, the VS Code Java attach configuration or `$JAVA_HOME/bin/jdb -attach localhost:<allocated-port>`. Inspect threads, detach without terminating the app, remove only that mapping with `adb forward --remove tcp:<allocated-port>`, and verify same PID/foreground navigation. No wait-for-debugger startup flag, public listening port, release debuggability change or persistent debugger pause. Unknown `accessibility_action` must return an error without starting a default camera task. Check runtime log for no extra diagnostics outside explicit broadcasts.
 
 
-- [ ] **CP6. App-service permission visibility [ADB, no LLM]**: With task idle and a user-approved app requiring an ungranted permission, run `adb shell dumpsys accessibility` (confirm PokeClaw bound), then `adb shell am broadcast -n io.agents.pokeclaw/.debug.DebugTaskReceiver -a io.agents.pokeclaw.DEBUG_TASK --es tool get_screen_info`. Read `adb exec-out run-as io.agents.pokeclaw tail -n 40 cache/app_logs/pokeclaw-app.log` locally; ordinary screen must return a tree. Use its fresh observed Enable position with `adb shell input tap <x> <y>` to open—not grant—the request. Confirm stable foreground with `adb shell dumpsys window`; run the same one-shot broadcast, `adb exec-out screencap -p > <private-local-path>.png`, and `adb shell dumpsys accessibility`. Match foreground window ID to the service's root-read log. If root/node is unavailable, record that limitation, not a universal platform ban; do not guess permission coordinates. If options are exposed, inspect enabled/action state and test only a separately authorized choice, verifying the resulting grant via `adb shell dumpsys package <target-package>`. Keep permission grants unchanged for visibility-only diagnosis. Do not run UIAutomator concurrently without verifying it preserves bound accessibility services.
+- [ ] **CP6. App-service permission visibility [ADB, no LLM]**: With task idle and a user-approved app requiring an ungranted permission, run `adb shell dumpsys accessibility` (confirm Bhavishya bound), then `adb shell am broadcast -n io.agents.pokeclaw/.debug.DebugTaskReceiver -a io.agents.pokeclaw.DEBUG_TASK --es tool get_screen_info`. Read `adb exec-out run-as io.agents.pokeclaw tail -n 40 cache/app_logs/pokeclaw-app.log` locally; ordinary screen must return a tree. Use its fresh observed Enable position with `adb shell input tap <x> <y>` to open—not grant—the request. Confirm stable foreground with `adb shell dumpsys window`; run the same one-shot broadcast, `adb exec-out screencap -p > <private-local-path>.png`, and `adb shell dumpsys accessibility`. Match foreground window ID to the service's root-read log. If root/node is unavailable, record that limitation, not a universal platform ban; do not guess permission coordinates. If options are exposed, inspect enabled/action state and test only a separately authorized choice, verifying the resulting grant via `adb shell dumpsys package <target-package>`. Keep permission grants unchanged for visibility-only diagnosis. Do not run UIAutomator concurrently without verifying it preserves bound accessibility services.
 
 ### Live visibility diagnosis — 2026-11-04 02:12
 
@@ -282,7 +348,7 @@ Defined before implementation. User-owned device/model acceptance; do not execut
 
 Defined before code changes. User-owned testing on actual installed apps; no assistant-led device/model execution or installation authorized. Use a real task that naturally opens another app's permission dialog; do not grant/revoke permissions or reset app data as automatic setup.
 
-- [ ] **PC1. Exact options [HUMAN, LLM-CLOUD/LOCAL]**: Start a real task → Android permission dialog appears → PokeClaw pauses, shows the dialog's full visible wording and selectable labels without choosing a default. Select a one-time/while-using/deny option → only that option is clicked, after re-reading the same dialog. Check both grant and denial; model sees the new screen rather than replaying the old action.
+- [ ] **PC1. Exact options [HUMAN, LLM-CLOUD/LOCAL]**: Start a real task → Android permission dialog appears → Bhavishya pauses, shows the dialog's full visible wording and selectable labels without choosing a default. Select a one-time/while-using/deny option → only that option is clicked, after re-reading the same dialog. Check both grant and denial; model sees the new screen rather than replaying the old action.
 - [ ] **PC2. Ambiguous input [HUMAN]**: Type an unrelated reply or generic “yes” when several options exist → clarification shown, no click. Enter the exact visible label or its displayed number → only that choice is accepted. Double-tap a choice → at most one authorized click.
 - [ ] **PC3. Stale dialog [HUMAN]**: While consent is pending, change/dismiss the Android dialog manually, rotate, or switch apps → old approval cannot operate on a different window/option. Changed dialog requires a new choice; absent dialog requires manual recovery. A following permission request requires its own approval.
 - [ ] **PC4. Stop and lifecycle [HUMAN]**: Leave consent unanswered → no model rounds/actions while waiting, no timeout grant. Stop from consent UI or existing Stop control → overlay closes, pending choice becomes unusable and task releases normally (cloud and local). Recreate chat Activity → consent is not lost or duplicated. Process death/restart must not restore permission approval. Submit another task while waiting → task lock still rejects it.
@@ -471,7 +537,7 @@ adb shell "am broadcast -a io.agents.pokeclaw.TASK -p io.agents.pokeclaw \
 
 Use this when you need a fast chatroom-bridge verification but do not trust raw ADB tap coordinates.
 It should create a visible user bubble, wait for the backend reply, and render the assistant bubble in the same conversation.
-On Android 15+, make sure PokeClaw is already in the foreground first; otherwise the system may block the receiver from bringing the chat activity forward for UI-visible verification.
+On Android 15+, make sure Bhavishya is already in the foreground first; otherwise the system may block the receiver from bringing the chat activity forward for UI-visible verification.
 
 ### Read Results from Logcat
 
@@ -493,7 +559,7 @@ For each M test, check:
 1. **Correct tool called** — e.g., "how much battery" should call `get_device_info(battery)`, NOT open Settings
 2. **Actual data in answer** — "73%, not charging, 32°C" NOT "I checked the battery"
 3. **Rounds** — system queries should be 2 rounds, complex tasks 5-15
-4. **Auto-return** — after task, PokeClaw chatroom should come back to foreground
+4. **Auto-return** — after task, Bhavishya chatroom should come back to foreground
 5. **Graceful failure** — if task can't complete, clear error message (not stuck/loop)
 6. **Env-dependent quick tasks** — if a sample contact/app is missing on this device, require the correct tool + a graceful failure; literal send/call success should be marked `BLOCKED`, not product `FAIL`
 
@@ -945,7 +1011,7 @@ When in doubt, rerun the smaller bundle first, then expand only if something dri
 - [ ] For monitor QA, an external sender path is available:
   - WhatsApp: second phone / second WhatsApp account
   - Telegram notification monitor: second Telegram account or a Telegram bot token + already-started bot chat on this device
-  - Telegram bot remote-control channel: Telegram bot token configured in PokeClaw, bot polling connected, and this handset's Telegram account able to send `/start` plus a task to the bot
+  - Telegram bot remote-control channel: Telegram bot token configured in Bhavishya, bot polling connected, and this handset's Telegram account able to send `/start` plus a task to the bot
 - [ ] For external automation QA, Tasker/MacroDroid or an equivalent explicit Activity/Broadcast intent sender is available:
   - the test must run against a release build once the production receiver exists
   - MacroDroid/Tasker-style app automation should prefer the exported Activity target on modern Android because background broadcast receivers can be blocked from opening an Activity

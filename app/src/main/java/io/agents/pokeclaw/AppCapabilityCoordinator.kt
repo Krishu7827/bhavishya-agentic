@@ -6,6 +6,7 @@ package io.agents.pokeclaw
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -18,6 +19,7 @@ import io.agents.pokeclaw.service.ClawAccessibilityService
 import io.agents.pokeclaw.service.ClawNotificationListener
 import io.agents.pokeclaw.service.ForegroundService
 import io.agents.pokeclaw.utils.KVUtils
+import io.agents.pokeclaw.utils.XLog
 
 enum class ServiceBindingState {
     DISABLED,
@@ -196,7 +198,16 @@ object AppCapabilityCoordinator {
                 } else {
                     KVUtils.markPendingAccessibilityReturn()
                 }
-                launch(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                try {
+                    XLog.i("AppCapabilityCoordinator", "openAccessibilitySettings: opening service details")
+                    launch(context, Intent("android.settings.ACCESSIBILITY_DETAILS_SETTINGS").apply {
+                        putExtra(Intent.EXTRA_COMPONENT_NAME,
+                            ComponentName(context, ClawAccessibilityService::class.java).flattenToString())
+                    })
+                } catch (e: Exception) {
+                    XLog.w("AppCapabilityCoordinator", "openAccessibilitySettings: details unavailable, opening list: ${e.message}")
+                    launch(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                }
             }
             AppRequirement.NOTIFICATION_ACCESS -> {
                 if (notificationAccessState(context) == ServiceBindingState.READY) {

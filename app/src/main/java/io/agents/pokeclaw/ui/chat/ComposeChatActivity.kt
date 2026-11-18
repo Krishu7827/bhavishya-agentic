@@ -4,6 +4,8 @@
 package io.agents.pokeclaw.ui.chat
 
 import io.agents.pokeclaw.AppCapabilityCoordinator
+import io.agents.pokeclaw.AppRequirement
+import io.agents.pokeclaw.R
 import io.agents.pokeclaw.ServiceBindingState
 import android.content.Intent
 import android.os.Bundle
@@ -48,6 +50,9 @@ class ComposeChatActivity : ComponentActivity() {
     private val _modelStatus = mutableStateOf("No model loaded")
     private val _isLocalModelActive = mutableStateOf(ModelConfigRepository.isLocalActive())
     private val _needsPermission = mutableStateOf(false)
+    private val _showAccessibilityWelcome = mutableStateOf(false)
+    private var openingAccessibilitySettings = false
+    private var lastAccessibilityState: ServiceBindingState? = null
     private val _isAwaitingReply = mutableStateOf(false)
     private val _isTaskRunning = mutableStateOf(false)
     private val _inputEnabled = mutableStateOf(true)    // False when model not ready (no task running)
@@ -110,8 +115,7 @@ class ComposeChatActivity : ComponentActivity() {
     private val permHandler = Handler(Looper.getMainLooper())
     private val permPoller = object : Runnable {
         override fun run() {
-            _needsPermission.value =
-                AppCapabilityCoordinator.accessibilityState(this@ComposeChatActivity) != ServiceBindingState.READY
+            refreshAccessibilityPermission(showOnEntry = false)
             permHandler.postDelayed(this, 1000)
         }
     }
@@ -161,7 +165,11 @@ class ComposeChatActivity : ComponentActivity() {
                 onNewChat = { newChat() },
                 onOpenSettings = { startActivity(Intent(this, SettingsActivity::class.java)) },
                 onOpenModels = { startActivity(Intent(this, LlmConfigActivity::class.java)) },
-                onFixPermissions = { startActivity(Intent(this, SettingsActivity::class.java)) },
+                onFixPermissions = {
+                    XLog.i(TAG, "accessibilityWelcome: permission shortcut tapped")
+                    refreshAccessibilityPermission(showOnEntry = true)
+                    if (!_showAccessibilityWelcome.value) openAccessibilitySettings()
+                },
                 onAttach = { Toast.makeText(this, "Image upload coming soon", Toast.LENGTH_SHORT).show() },
                 conversations = _conversations.toList(),
                 onSelectConversation = { loadConversation(it) },
@@ -196,6 +204,16 @@ class ComposeChatActivity : ComponentActivity() {
                 onModelSwitch = { modelId, displayName -> switchModel(modelId, displayName) },
                 colors = composeColors,
             )
+            if (_showAccessibilityWelcome.value) {
+                AccessibilityWelcomeDialog(
+                    colors = composeColors,
+                    onAllow = { openAccessibilitySettings() },
+                    onDismiss = {
+                        XLog.i(TAG, "accessibilityWelcome: dismissed; chat remains available")
+                        _showAccessibilityWelcome.value = false
+                    },
+                )
+            }
         }
 
         refreshSidebarHistory()
@@ -244,8 +262,8 @@ class ComposeChatActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        _needsPermission.value =
-            AppCapabilityCoordinator.accessibilityState(this) != ServiceBindingState.READY
+        openingAccessibilitySettings = false
+        refreshAccessibilityPermission(showOnEntry = true)
         _isLocalModelActive.value = ModelConfigRepository.isLocalActive()
         _isTaskRunning.value = appViewModel.isTaskRunning()
         refreshSidebarHistory()
@@ -272,6 +290,40 @@ class ComposeChatActivity : ComponentActivity() {
         super.onDestroy()
         chatSessionController.onDestroy()
         executor.shutdown()
+    }
+
+    private fun refreshAccessibilityPermission(showOnEntry: Boolean) {
+        val state = AppCapabilityCoordinator.accessibilityState(this)
+        val changed = state != lastAccessibilityState
+        if (changed || showOnEntry) {
+            XLog.i(TAG, "accessibilityWelcome: state=$lastAccessibilityState -> $state, entry=$showOnEntry")
+        }
+        lastAccessibilityState = state
+        _needsPermission.value = state != ServiceBindingState.READY
+        if (state != ServiceBindingState.DISABLED) {
+            _showAccessibilityWelcome.value = false
+        } else if (showOnEntry || changed) {
+            XLog.i(TAG, "accessibilityWelcome: showing disabled-permission dialog")
+            _showAccessibilityWelcome.value = true
+        }
+    }
+
+    private fun openAccessibilitySettings() {
+        if (openingAccessibilitySettings) {
+            XLog.d(TAG, "accessibilityWelcome: ignoring repeated Allow tap")
+            return
+        }
+        openingAccessibilitySettings = true
+        XLog.i(TAG, "accessibilityWelcome: user requested Android settings")
+        try {
+            AppCapabilityCoordinator.openSystemSettings(this, AppRequirement.ACCESSIBILITY)
+            _showAccessibilityWelcome.value = false
+        } catch (e: Exception) {
+            openingAccessibilitySettings = false
+            KVUtils.clearPendingAccessibilityReturn()
+            XLog.e(TAG, "accessibilityWelcome: failed to open Android settings", e)
+            Toast.makeText(this, R.string.accessibility_welcome_settings_failed, Toast.LENGTH_LONG).show()
+        }
     }
 
     // ==================== CHAT ====================

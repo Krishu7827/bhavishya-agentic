@@ -1,10 +1,32 @@
-# PokeClaw Backlog
+# Bhavishya Backlog
 
 Items go in, get prioritized, get done, get crossed out. Simple.
+
+Current product references use **Bhavishya**. Historical observations, release artifacts and upstream issue/PR provenance retain their original names; package/source identifiers and signing remain unchanged.
 
 Priority: `P0` = blocks users, fix now. `P1` = next up. `P2` = when we get to it. `P3` = nice to have.
 
 ---
+
+## Accessibility enable → chat return — 2026-11-18
+
+- [ ] **P1 / implemented and installed with install-only approval; behavioral QA pending** Build and installed APK checksum verified; user requested installation only, no device tests. After the user opens accessibility settings from Bhavishya and enables the service, return once to the existing chat instead of in-app Settings. Retain the existing two-minute pending-return window; unrelated/manual later service connections must not open chat. Remove the unconditional global Back action so a different foreground screen cannot accidentally receive Back. Preserve conversations and show a readable error if the chat launch fails. AW6–AW8 plus affected AW1/PA6/H/K and full accessibility regression gate acceptance.
+
+## Accessibility welcome prompt — 2026-11-18
+
+- [ ] **P1 / dismissal refinement implemented, device QA pending** Outside taps and Android Back cannot dismiss the welcome modal; only Not now explicitly dismisses it. Allow retains system-settings navigation; enabling still clears the prompt. Offline debug build passed; 10:50 APK installed with separate install-only approval and matching checksum. AW9 and affected AW2/H QA pending approval; ask before installing each build.
+
+- [ ] **P1 / installed with approval at 10:31; full device QA pending** In-place update/checksum/launch verified. HMD Android 16 requires a privileged permission for service details, so the implemented Android Accessibility-list fallback is used. When accessibility is OFF, opening Bhavishya shows a themed permission dialog with Allow accessibility and Not now. Allow opens Android's service detail page where supported, with Accessibility Settings fallback; the user grants access manually. Returning after enabling dismisses the dialog; declining leaves chat usable with a direct permission shortcut. Do not mistake a connecting/disconnected but enabled service for an OFF permission. AW1–AW5 and affected H/K QA gate acceptance.
+
+## Payment-app accessibility compatibility — 2026-11-18
+
+- Requested behavior: detect a configured payment app opening, wait two seconds, disable Bhavishya's own accessibility service and post a Bhavishya notification explaining that it is off. Target app list and behavior when leaving the payment app during the delay need confirmation. Notification permission must be handled before enabling this feature; no automatic re-enable. A two-second delay cannot guarantee the payment app accepts the session; reopening it may be necessary.
+
+- [ ] **P1 / investigation; not implemented** User reports payments are blocked while accessibility is enabled and proposes disabling Bhavishya accessibility when a payment app opens. Confirm affected app and exact warning before attributing the block to accessibility, sideloading, overlays or another device check. Consider explicit user-controlled service disable and manual re-enable guidance; merely pausing agent actions leaves accessibility enabled. Android `AccessibilityService.disableSelf()` disables this service, but ordinary apps cannot silently re-enable it. Automatic foreground detection can race with payment-app checks and stops once the service is disabled. Respect payment-app protections; do not conceal accessibility or bypass integrity checks. Play Store distribution alone does not guarantee compatibility. Any implementation needs consent, active-task handling and real-device QA without initiating financial transactions.
+
+## Bhavishya documentation branding — 2026-11-07
+
+- [x] **P1 / documentation only** Update QA/backlog titles, current product prose and app-facing steps to Bhavishya. Preserve commands, identifiers, historical branding evidence, release/signing records and upstream provenance. No runtime changes or new device-QA claims.
 
 ## Bhavishya branding — 2026-11-05
 
@@ -81,7 +103,7 @@ Monitor investigation follow-up (2026-11-05 01:45): historical Android activity 
 - [~] **P1** AppCapabilityCoordinator process-young grace (partial fix shipped 2026-05-28): `bindingState` now returns `CONNECTING` for the first 30s after process start regardless of stale `lastHealthyAt` in MMKV. Addresses the case where OS keeps the AccessibilityService enabled across an app process restart and rebinds within seconds — previously the in-app coordinator would see `running=false`+`lastHealthyAt` from minutes ago and immediately return `DEGRADED`, forcing the user back to Settings. Limitation: cannot help the Pixel-specific behavior where `force-stop` revokes the secure setting `accessibility_enabled` (true `DISABLED` state, requires user re-enable). Production behavior on Xiaomi/Samsung task-killers may or may not preserve the secure setting — needs telemetry to confirm. Runtime QA blocked on Pixel by the force-stop auto-disable; code-review verified. **2026-05-28 commit `pending` adds 30s process-start grace.**
 - [ ] **P1** Historical upgrade gap: users on the older public debug signing path still need a one-time uninstall + reinstall because the original public signing key is already lost
 - [ ] **P2** K3-a: Auto-return fires on every service connect, not just user-initiated permission enable
-- [ ] **P2** B2-a: No auto-return to PokeClaw after task completes in another app (e.g., stuck in YouTube)
+- [ ] **P2** B2-a: No auto-return to Bhavishya after task completes in another app (e.g., stuck in YouTube)
 - [ ] **P1** Investigate MediaTek/Samsung local-engine bring-up failures that still report OpenCL/LiteRT engine creation errors on some devices even after GPU→CPU fallback
 - [ ] **P2** Settings screen: active model row breaks layout when the model name is long; keep the label/value aligned and truncate or wrap cleanly without shoving the left label into a narrow column
 
@@ -99,7 +121,7 @@ Monitor investigation follow-up (2026-11-05 01:45): historical Android activity 
 - [ ] **P2** Voice input: add a prompt microphone button as an input method, preferably using an available cloud transcription path when the user has a cloud API key and a local/on-device option later. Wake-word/background listening is a separate higher-risk permission/battery design, not the MVP.
 - [ ] **P1** Local model import UX: keep shared-storage `.litertlm` import easy and explain clearly why other apps' `Android/data/...` sandboxes (for example Edge Gallery) are not directly readable
 - [ ] **P1** More small local model options: add 1B / 1.5B-class local models so lower-RAM phones can still run a useful on-device agent
-- [ ] **P1** Custom local model sources: let users point PokeClaw at user-defined model URLs / hosted downloads instead of only the built-in catalog
+- [ ] **P1** Custom local model sources: let users point Bhavishya at user-defined model URLs / hosted downloads instead of only the built-in catalog
 - [ ] **P2** Google AI Core integration research: evaluate Android's official on-device AI / system model APIs as an optional local runtime path
 - [ ] **P1** Structured monitor identifiers: let monitor setup keep a user-facing nickname while using a more stable identifier where possible (phone number / app-stable id / aliases) so WhatsApp/Telegram display-name drift stops breaking setup
 - [ ] **P2** Chat keyboard dismissal polish: tapping non-button chatroom space should reliably clear focus and hide IME in both empty and non-empty conversations
@@ -110,16 +132,16 @@ Monitor investigation follow-up (2026-11-05 01:45): historical Android activity 
 - [x] ~~**P2** Monitor stays in app~~ — done 2026-04-08, removed GLOBAL_ACTION_HOME
 - [ ] **P2** Unified task registry: monitor + agent tasks tracked in same system (top bar, floating button, etc.)
 - [ ] **P3** Rename chat session (H6): pencil icon in sidebar → InputDialog → update title in DB + markdown
-- [ ] **P3** Floating button: use PokeClaw icon instead of "AI" text
+- [ ] **P3** Floating button: use Bhavishya icon instead of "AI" text
 - [ ] **P3** ChatViewModel extraction: move business logic out of ComposeChatActivity god class
 - [ ] **P1** Full i18n refactor for ChatScreen.kt — 75+ user-facing hardcoded English strings (quick task templates, intro text, monitor labels, send/cancel labels) need extracting to strings.xml + zh + ja translation. Surfaced by realme RMX3823 user (#50) wanting "thorough Chinese version". Voice input strings (4 strings) already i18n'd in v0.7.0 as a first slice.
 
 ## QA Gaps
 
-- [ ] **P0** Missed-call follow-up E2E: missed-call notification / phone-state trigger reaches PokeClaw, follow-up message is sent to the caller, and the result/status is visible in the same chatroom
-- [ ] **P0** Production intent E2E: Tasker/MacroDroid-style explicit broadcast reaches PokeClaw in a release build, starts the requested task/chat, and never bypasses safety/global rules
-- [ ] **P1** Production intent callback E2E: when an external automation request includes `request_id` and `return_action`, PokeClaw broadcasts a completion/failure result that Tasker/MacroDroid can consume
-- [ ] **P1** Telegram bot channel E2E: token configured -> polling connected -> user sends `/start` and a task to the bot -> PokeClaw receives the update -> returns a visible bot reply. Current QA is blocked by the handset Telegram account being frozen/read-only.
+- [ ] **P0** Missed-call follow-up E2E: missed-call notification / phone-state trigger reaches Bhavishya, follow-up message is sent to the caller, and the result/status is visible in the same chatroom
+- [ ] **P0** Production intent E2E: Tasker/MacroDroid-style explicit broadcast reaches Bhavishya in a release build, starts the requested task/chat, and never bypasses safety/global rules
+- [ ] **P1** Production intent callback E2E: when an external automation request includes `request_id` and `return_action`, Bhavishya broadcasts a completion/failure result that Tasker/MacroDroid can consume
+- [ ] **P1** Telegram bot channel E2E: token configured -> polling connected -> user sends `/start` and a task to the bot -> Bhavishya receives the update -> returns a visible bot reply. Current QA is blocked by the handset Telegram account being frozen/read-only.
 - [ ] **P1** C2: Auto-reply trigger E2E — needs 2nd device to send WhatsApp message to Girlfriend
 - [x] ~~**P1** Release QA: verify locally signed `0.5.1+` public APK can upgrade in-place over the next signed public build once the stable key is installed in GitHub Actions~~ — done 2026-05-26: v0.6.12 signed → v0.7.0 signed in-place upgrade PASS on Pixel 8 Pro (same keystore, no uninstall needed)
 - [ ] **P0** PROCESS GATE — full QA on signed-release APK BEFORE pushing the version tag. v0.7.0 was tagged first and QA'd second; CLAUDE.md says full QA triggers on "before any release/version bump". Next release: pull the locally-built signed `assembleRelease` APK or the CI artifact from a draft release, run V/W/X/Y + J + K + P sections, only then push the tag.
@@ -138,7 +160,7 @@ Monitor investigation follow-up (2026-11-05 01:45): historical Android activity 
 - YC application showcase
 - Layer 2 NLP Playbooks as "App Cards" like DroidRun
 - On-device LLM as competitive moat (first to ship with Gemma 4)
-- Positioning: cloud/desktop-driven mobile-agent frameworks already exist; PokeClaw should own the phone-resident, local-first, model-slot harness that can run on a user's own Android device without a PC/cloud phone fleet.
+- Positioning: cloud/desktop-driven mobile-agent frameworks already exist; Bhavishya should own the phone-resident, local-first, model-slot harness that can run on a user's own Android device without a PC/cloud phone fleet.
 
 ---
 

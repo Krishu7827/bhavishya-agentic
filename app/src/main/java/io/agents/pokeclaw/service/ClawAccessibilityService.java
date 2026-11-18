@@ -41,6 +41,7 @@ public class ClawAccessibilityService extends AccessibilityService {
 
     private static final String TAG = "ClawA11yService";
     private static volatile ClawAccessibilityService instance;
+    private PaymentAppGuard paymentAppGuard;
 
     public static ClawAccessibilityService getInstance() {
         return instance;
@@ -125,11 +126,15 @@ public class ClawAccessibilityService extends AccessibilityService {
         XLog.i(TAG, "Accessibility service connected");
         ForegroundService.Companion.syncToBackgroundState(this);
         maybeReturnToAppAfterPermissionFlow();
+        if (paymentAppGuard != null) paymentAppGuard.stop();
+        paymentAppGuard = new PaymentAppGuard(this);
+        paymentAppGuard.onConnected();
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         KVUtils.INSTANCE.noteAccessibilityHeartbeat();
+        if (paymentAppGuard != null) paymentAppGuard.onEvent(event);
         if (event != null && event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
                 && event.getPackageName() != null
                 && PermissionDialog.isController(this, event.getPackageName().toString())) {
@@ -149,13 +154,21 @@ public class ClawAccessibilityService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
+        if (paymentAppGuard != null) paymentAppGuard.stop();
         KVUtils.INSTANCE.noteAccessibilityInterrupted();
         XLog.w(TAG, "Accessibility service interrupted");
         ForegroundService.Companion.syncToBackgroundState(this);
     }
 
     @Override
+    public boolean onUnbind(Intent intent) {
+        if (paymentAppGuard != null) paymentAppGuard.stop();
+        return super.onUnbind(intent);
+    }
+
+    @Override
     public void onDestroy() {
+        if (paymentAppGuard != null) paymentAppGuard.stop();
         super.onDestroy();
         instance = null;
         KVUtils.INSTANCE.noteAccessibilityDisconnected();
@@ -163,11 +176,7 @@ public class ClawAccessibilityService extends AccessibilityService {
         ForegroundService.Companion.syncToBackgroundState(this);
     }
 
-    /**
-     * Android Settings keeps its own back stack during the Accessibility enable flow.
-     * When the user came here from PokeClaw Settings, unwind that stack once, then
-     * explicitly surface the app Settings screen again.
-     */
+    /** Return once to chat after an app-initiated permission flow, without navigating other apps. */
     private void maybeReturnToAppAfterPermissionFlow() {
         boolean pendingReturn;
         try {
@@ -177,30 +186,32 @@ public class ClawAccessibilityService extends AccessibilityService {
             return;
         }
         if (!pendingReturn) {
+            XLog.i(TAG, "Accessibility chat return: no fresh pending request; staying on current screen");
             return;
         }
 
-        XLog.i(TAG, "Completing pending accessibility permission return");
+        XLog.i(TAG, "Accessibility chat return: pending request consumed; scheduling in 700ms");
         Handler mainHandler = new Handler(Looper.getMainLooper());
-
         mainHandler.postDelayed(() -> {
-            try {
-                performGlobalAction(GLOBAL_ACTION_BACK);
-            } catch (Exception e) {
-                XLog.w(TAG, "Failed to exit accessibility detail screen", e);
+            boolean connected = instance == this;
+            boolean enabled = isEnabledInSettings(this);
+            XLog.i(TAG, "Accessibility chat return: connected=" + connected + ", enabled=" + enabled);
+            if (!connected || !enabled) {
+                XLog.i(TAG, "Accessibility chat return: skipped because service is no longer ready");
+                return;
             }
-        }, 250);
-
-        mainHandler.postDelayed(() -> {
             try {
-                Intent intent = new Intent(this, io.agents.pokeclaw.ui.settings.SettingsActivity.class);
+                Intent intent = new Intent(this, io.agents.pokeclaw.ui.chat.ComposeChatActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                XLog.i(TAG, "Accessibility chat return: requesting existing chat foreground");
                 startActivity(intent);
             } catch (Exception e) {
-                XLog.w(TAG, "Could not bring app to foreground after service connected", e);
+                XLog.e(TAG, "Accessibility chat return: failed to open chat after service connected", e);
+                android.widget.Toast.makeText(this,
+                        io.agents.pokeclaw.R.string.accessibility_chat_return_failed,
+                        android.widget.Toast.LENGTH_LONG).show();
             }
         }, 700);
     }

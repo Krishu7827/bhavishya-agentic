@@ -20,6 +20,7 @@ This is the repo map for coding agents. Keep canonical information in existing f
 | Path | Purpose |
 |------|---------|
 | `app/src/main/java/io/agents/pokeclaw/` | Android app source |
+| `app/src/main/java/io/agents/pokeclaw/ui/chat/AccessibilityWelcomeDialog.kt` | Themed accessibility-OFF guidance; chat activity owns visibility, coordinator owns system-settings navigation |
 | `app/src/main/java/io/agents/pokeclaw/agent/AgentConfig.kt` | Cloud base system prompt restored to original text at user request; runtime round cap remains removed |
 | `app/src/main/java/io/agents/pokeclaw/agent/DefaultAgentService.kt` | Agent loop and prompt composition; email-specific guard and its tests removed 2026-11-04, other existing guards retained |
 | `app/src/main/assets/playbooks/` | Built-in playbooks used by the agent harness |

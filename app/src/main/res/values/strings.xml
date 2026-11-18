@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">Bhavishya</string>
+    <string name="accessibility_chat_return_failed">Accessibility is enabled. Open Bhavishya to return to your chat.</string>
+    <string name="accessibility_welcome_badge">ACCESSIBILITY IS OFF</string>
+    <string name="accessibility_welcome_title">Let Bhavishya help you</string>
+    <string name="accessibility_welcome_body">Enable accessibility so Bhavishya can read on-screen content and tap or swipe for tasks you request. You can turn it off anytime in Android Settings.</string>
+    <string name="accessibility_welcome_steps">1. Tap Allow accessibility below.\n2. In Android Settings, select Bhavishya if needed and turn on Use Bhavishya.\n3. Review the system prompt and allow access. Bhavishya will return to your chat once connected.</string>
+    <string name="accessibility_welcome_allow">Allow accessibility</string>
+    <string name="accessibility_welcome_later">Not now</string>
+    <string name="accessibility_welcome_settings_failed">Could not open Accessibility Settings. Open Android Settings → Accessibility → Bhavishya to enable access.</string>
+    <string name="payment_safety_channel">Bhavishya payment safety</string>
+    <string name="payment_accessibility_off_title">Bhavishya · Accessibility off</string>
+    <string name="payment_accessibility_off_text">Turned off after opening a payment or banking app. Tap to open Accessibility Settings and manually enable Bhavishya when finished.</string>
+    <string name="payment_accessibility_off_notifications_blocked">Bhavishya accessibility is off. Re-enable it in Accessibility Settings when finished. Enable Bhavishya notifications in Android Settings to receive off alerts.</string>
+    <string name="payment_accessibility_disable_failed">Could not confirm accessibility is off. Turn off Bhavishya in Android Accessibility Settings before retrying the payment app.</string>
     <string name="accessibility_assistance_description">Bhavishya helps people who have difficulty tapping or swiping control their phone through chat. It reads on-screen controls and performs actions you request. Permission choices remain yours; controls Android does not expose may require manual assistance.</string>
 
     <!-- Common -->
